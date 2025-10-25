@@ -6,7 +6,7 @@ import org.openqa.selenium.edge.EdgeDriver;
 public class TC35_XemTienDoCongViec {
     public static void main(String[] args) {
         // --- Cấu hình và Khởi tạo ---
-        System.setProperty("webdriver.edge.driver", "C:\\Users\\asus\\Downloads\\edgedriver_win64\\msedgedriver.exe");
+        System.setProperty("webdriver.edge.driver", "C:\\msedgedriver.exe");
         WebDriver driver = new EdgeDriver();
         driver.manage().window().maximize();
         
@@ -49,4 +49,5 @@ public class TC35_XemTienDoCongViec {
             driver.close();
         }
     }
+
 }

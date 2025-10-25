@@ -13,8 +13,8 @@ public class DashBoardPage {
     // child-studentaffairs-studentaffairstimetable-index tương ứng với mục "Xem thời khóa biểu"
     private By TaskList = By.id("child-trogiang-resultapply");
     private By Task = By.id("parent-trogiang");
-    private By HK = By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div[1]/div/div[1]/select/option[5]");
-    private By HP = By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div[1]/div/div[2]/select/option[5]");
+    private By HK = By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div[1]/div/div[1]/select/option[6]");
+    private By HP = By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div[1]/div/div[2]/select/option[6]");
 
     // Constructor
     public DashBoardPage(WebDriver driver) {
@@ -33,4 +33,5 @@ public class DashBoardPage {
 		wait.until(ExpectedConditions.elementToBeClickable(HK)).click();
 		wait.until(ExpectedConditions.elementToBeClickable(HP)).click();
 	}
+
 }

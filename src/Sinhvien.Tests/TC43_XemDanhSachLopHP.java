@@ -1,52 +1,68 @@
-package TC43_XemDanhSachLopHP;
+package Sinhvien.Tests;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
+import Sinhvien.Pages.LoginPage;
+import Sinhvien.Pages.DashBoardPage_XemDanhSachLopHP;
 
 public class TC43_XemDanhSachLopHP {
-    public static void main(String[] args) {
-        // --- Cấu hình và Khởi tạo ---
+    private WebDriver driver;
+    private LoginPage loginPage;
+    private DashBoardPage_XemDanhSachLopHP dashBoardPage;
+    private final String url = "https://cntttest.vanlanguni.edu.vn:18081/Ta2025";
+
+    @BeforeClass
+    public void setUp() {
+        // --- Khởi tạo WebDriver ---
         System.setProperty("webdriver.edge.driver", "C:\\msedgedriver.exe");
-        WebDriver driver = new EdgeDriver();
+        driver = new EdgeDriver();
         driver.manage().window().maximize();
-        
-        // Dữ liệu đăng nhập (Nên lưu trữ ở file cấu hình/properties nhưng ở đây đặt tạm)
-        String url = "https://cntttest.vanlanguni.edu.vn:18081/Ta2025";
-        
-        // --- Khởi tạo Page Objects ---
-        LoginPage loginPage = new LoginPage(driver);
-        DashBoardPage dashBoardPage = new DashBoardPage(driver);
-        
+
+        // --- Khởi tạo các Page Object ---
+        loginPage = new LoginPage(driver);
+        dashBoardPage = new DashBoardPage_XemDanhSachLopHP(driver);
+    }
+
+    @Test(priority = 1, description = "Kiểm thử xem danh sách lớp học phần")
+    public void testXemDanhSachLopHP() {
         try {
-            // 1. Điều hướng đến URL và xử lý cảnh báo chứng chỉ
+            // 1. Điều hướng và xử lý chứng chỉ
             driver.navigate().to(url);
             loginPage.handleCertificateWarning();
             loginPage.selectAccount();
-            
-            // 2. Thực hiện Đăng nhập
+
             System.out.println("Đang thực hiện đăng nhập...");
             System.out.println("Đăng nhập thành công.");
-            
-            // 3. Điều hướng đến trang Xem Kết danh sách học phần
+
+            // 2. Điều hướng đến trang Lớp học phần
             dashBoardPage.classsection();
             System.out.println("Đang nhấp vào 'Lớp học phần'...");
             Thread.sleep(3000);
-            dashBoardPage.ChoosePart();
 
+            // 3. Chọn phần cụ thể
+            dashBoardPage.ChoosePart();
+            System.out.println("Đã chọn phần trong danh sách Lớp học phần.");
 
         } catch (Exception e) {
             System.err.println("Kiểm thử thất bại: " + e.getMessage());
             e.printStackTrace();
-        } finally {
-            // 4. Đóng trình duyệt
-            // Dành thời gian để xem kết quả trước khi đóng (tùy chọn)
-            try {
-                Thread.sleep(3000); 
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-            driver.close();
+            assert false : "Lỗi trong quá trình kiểm thử: " + e.getMessage();
         }
     }
 
+    @AfterClass
+    public void tearDown() {
+        if (driver != null) {
+            try {
+                Thread.sleep(3000); // Tạm dừng để xem kết quả
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            driver.quit(); // Đóng toàn bộ EdgeDriver
+        }
+    }
 }

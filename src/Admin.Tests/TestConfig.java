@@ -2,7 +2,6 @@ package com.admintest;
 
 /**
  * File config chung cho các test.
- * Tối ưu hóa: loại bỏ các config về profile không cần thiết.
  */
 public final class TestConfig {
     // ====== WebDriver Configuration ======
@@ -91,3 +90,4 @@ public final class TestConfig {
         // Prevent instantiation
     }
 }
+

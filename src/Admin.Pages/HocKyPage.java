@@ -331,7 +331,6 @@ public class HocKyPage {
         }
 
         if (!dayClicked) {
-            // Cuối cùng: nếu dev đã cấu hình XPATH_O_NGAY_TRONG_LICH_TEMPLATE thì thử dùng
             try {
                 By oNgay = By.xpath(String.format(XPATH_O_NGAY_TRONG_LICH_TEMPLATE, dayText));
                 WebElement el = waitVisible(oNgay);
@@ -388,7 +387,6 @@ public class HocKyPage {
 
     /**
      * Chọn ngày trong lịch dựa trên cấu hình tĩnh DATEPICKER_DAY_ID/DATEPICKER_DAY_XPATH.
-     * - Ưu tiên ID; nếu rỗng thì dùng XPath; nếu đều rỗng thì không làm gì.
      */
     public void chonNgayBatDauTheoCauHinh() {
         if (DATEPICKER_DAY_ID != null && !DATEPICKER_DAY_ID.isEmpty()) {
@@ -406,7 +404,7 @@ public class HocKyPage {
         waitClickable(btnLuuThongTin).click();
     }
 
-    /** Chờ toast/thông báo thành công (tuỳ chọn, nếu có cấu hình) */
+    /** Chờ toast/thông báo thành công */
     public void choThongBaoThanhCong() {
         try {
             waitVisible(toastThanhCong);
@@ -415,13 +413,13 @@ public class HocKyPage {
         }
     }
 
-    // ====== Methods hỗ trợ TC03_AnHocKy ======
-    /** Click nút ẩn học kỳ (placeholder locator cần được điền trước khi chạy) */
+    // ====== AnHocKy ======
+    /** Click nút ẩn học kỳ */
     public void clickAnHocKy() {
         waitClickable(btnAnHocKy).click();
     }
 
-    /** Chờ thông báo (toast) sau khi ẩn học kỳ thành công (placeholder locator) */
+    /** Chờ thông báo sau khi ẩn học kỳ thành công */
     public void choThongBaoAnHocKy() {
         try {
             waitVisible(thongBaoAnThanhCong);

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Admin Test Suite" verbose="1" preserve-order="true">
+    <!-- Run Admin tests without numeric prefixes -->
+    <test name="TaoHocKy">
+        <classes>
+            <class name="com.admintest.TaoHocKy"/>
+        </classes>
+    </test>
+
+    <test name="CapNhatHocKy">
+        <classes>
+            <class name="com.admintest.CapNhatHocKy"/>
+        </classes>
+    </test>
+
+    <test name="AnHocKy">
+        <classes>
+            <class name="com.admintest.AnHocKy"/>
+        </classes>
+    </test>
+
+    <test name="XemHocKy">
+        <classes>
+            <class name="com.admintest.XemHocKy"/>
+        </classes>
+    </test>
+
+        <test name="MoDangKyTroGiang">
+            <classes>
+                <class name="com.admintest.MoDangKyTroGiang"/>
+            </classes>
+        </test>
+</suite>

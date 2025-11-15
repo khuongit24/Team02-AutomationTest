@@ -29,8 +29,7 @@ public class HocKyPage {
     // Nút "Thêm mới" trên trang Học kỳ
     private final By btnThemMoi = By.xpath("/html/body/div[2]/main/section/div[1]/div/div/div[2]/a");
 
-    // Nút "Cập nhật" trên trang Học kỳ (ví dụ nằm ở mỗi dòng bảng) – để placeholder
-    // Hãy thay thế XPath bên dưới bằng locator thật sự (ví dụ: nút cập nhật của dòng đầu tiên)
+    // Nút "Cập nhật" trên trang Học kỳ 
     private final By btnCapNhat = By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div/div/div/div[2]/div/table/tbody/tr[1]/td[6]/a/span/i");
 
     // Ô nhập "Học kỳ"
@@ -43,7 +42,6 @@ public class HocKyPage {
     private static final String XPATH_OPTION_NAM_TEMPLATE = "//select[/html/body/div[2]/main/section/div[3]/div/div/div[2]/div/div[2]/div/select/option[11]]";
 
     // Datepicker: ô chọn ngày bắt đầu (click để mở lịch)
-    // Cho phép gán ID thật (vd: "startDate") hoặc để nguyên XPATH. Nếu chuỗi bắt đầu bằng '/' coi là XPath.
     private static final String LOCATOR_INPUT_NGAY_BAT_DAU = "/html/body/div[2]/main/section/div[3]/div/div/div[2]/div/div[4]/div/input"; // thay bằng id nếu có, ví dụ: "startDate"
     private final By inputNgayBatDau =
             (LOCATOR_INPUT_NGAY_BAT_DAU != null && !LOCATOR_INPUT_NGAY_BAT_DAU.isEmpty())
@@ -54,8 +52,7 @@ public class HocKyPage {
     private static final String LOCATOR_DATEPICKER_YEAR_INPUT  = "/html/body/div[4]/div[1]/div/div/div/input"; 
 
     // Trường hợp cần chọn ngày theo ID cụ thể của từng ô ngày.
-    // Nếu hệ thống gắn id cho từng ô ngày theo template (vd: "day-8"), hãy điền "%s" vào template.
-    private static final String ID_DATEPICKER_DAY_TEMPLATE = "day-%s"; // nếu trang dùng id day-<n>. Nếu không có pattern, để rỗng.
+    private static final String ID_DATEPICKER_DAY_TEMPLATE = "day-%s"; 
 
     // Fallback (nếu không dùng ID): các locator theo Flatpickr 
     private final By fpCalendarOpen = By.cssSelector(".flatpickr-calendar.open, .flatpickr-calendar.inline");
@@ -77,11 +74,11 @@ public class HocKyPage {
     private final By thongBaoAnThanhCong = By.xpath("/html/body/div[6]/div/h2"); // Placeholder
 
     private final By inputTimKiemHocKy = By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div/div/div/div[1]/div[2]/div/label/input"); 
-    // Bảng kết quả (container) – có thể là <table> hoặc <div> grid; dùng để khoanh vùng khi lấy dữ liệu
+    // Bảng kết quả 
     private final By bangHocKyContainer = By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div/div/div/div[2]/div"); 
-    // Locator cho các dòng trong bảng – tuỳ UI, có thể là //table/tbody/tr hoặc //div[contains(@class,'row')]
+    // Locator cho các dòng trong bảng
     private final By hangTrongBangHocKy = By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div/div/div/div[2]/div/table/tbody/tr/td[1]"); 
-    // Locator cho các ô (cell) trong một dòng – ví dụ .//td hoặc .//div[contains(@class,'cell')]
+    // Locator cho các ô 
     private final By oTrongHangHocKy = By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div/div/div/div[2]/div/table/tbody/tr/td[1]"); 
     /** Click vào ô tìm kiếm học kỳ */
     public void clickOtimKiemHocKy() {
@@ -119,7 +116,6 @@ public class HocKyPage {
                 }
             }
         } catch (Exception e) {
-            // Nếu container chưa điền locator đúng, trả danh sách rỗng để test tự xử lý
         }
         return result;
     }
@@ -227,13 +223,11 @@ public class HocKyPage {
 
     /** Chọn "Năm bắt đầu" trong dropdown. Yêu cầu cấu hình XPATH_OPTION_NAM_TEMPLATE. */
     public void chonNamBatDau(String nam) {
-        // Dùng Select cho <select> là ổn định nhất
         WebElement selectEl = waitVisible(dropdownNamBatDau);
         try {
             Select select = new Select(selectEl);
             select.selectByVisibleText(nam);
         } catch (Exception e) {
-            // Nếu không phải <select>, fallback sang click theo option XPath template
             try {
                 waitClickable(dropdownNamBatDau).click();
                 By optionNam = By.xpath(String.format(XPATH_OPTION_NAM_TEMPLATE, nam));
@@ -244,19 +238,11 @@ public class HocKyPage {
 
     /**
      * Chọn ngày bắt đầu bằng lịch (datepicker).
-     *
-     * Mặc định thuật toán:
-     * - Click ô ngày để mở lịch
-     * - (Tuỳ chọn) Điều hướng tới đúng tháng/năm bằng hai nút điều hướng nếu cần
-     * - Click vào ngày tương ứng
-     *
-     * Cần điền đúng các locator datepicker*, và TEMPLATE XPATH_O_NGAY_TRONG_LICH_TEMPLATE.
      */
     public void chonNgayBatDau(LocalDate date) {
         // 1) Mở lịch
         waitClickable(inputNgayBatDau).click();
-
-        // 2) Chọn tháng qua dropdown (ưu tiên ID, fallback theo Flatpickr)
+        // 2) Chọn tháng qua dropdown
         int targetMonthIndex = date.getMonthValue() - 1; // 0..11
         boolean monthSet = false;
         if (LOCATOR_DATEPICKER_MONTH_SELECT != null && !LOCATOR_DATEPICKER_MONTH_SELECT.isEmpty()) {
@@ -265,7 +251,7 @@ public class HocKyPage {
                         LOCATOR_DATEPICKER_MONTH_SELECT.startsWith("/") ? By.xpath(LOCATOR_DATEPICKER_MONTH_SELECT) : By.id(LOCATOR_DATEPICKER_MONTH_SELECT));
                 new Select(monthSelEl).selectByIndex(targetMonthIndex);
                 monthSet = true;
-            } catch (Exception ignore) { /* fallback below */ }
+            } catch (Exception ignore) { /* fallback ở bên dưới*/ }
         }
         if (!monthSet) {
             try {
@@ -276,7 +262,7 @@ public class HocKyPage {
             } catch (Exception ignore) { }
         }
 
-        // 3) Chọn năm qua input spinner (ưu tiên ID, fallback Flatpickr)
+        // 3) Chọn năm qua input spinner (ưu tiên ID rồi sau đó fallback Flatpickr)
         String yearText = String.valueOf(date.getYear());
         boolean yearSet = false;
         if (LOCATOR_DATEPICKER_YEAR_INPUT != null && !LOCATOR_DATEPICKER_YEAR_INPUT.isEmpty()) {
@@ -354,8 +340,7 @@ public class HocKyPage {
     }
 
     /**
-     * Chọn trực tiếp ngày trong lịch bằng một XPath do người dùng truyền vào.
-     * Ví dụ: //td[.='15'] hoặc //button[@data-day='15']
+     * Chọn trực tiếp ngày trong lịch bằng một XPath 
      */
     public void chonNgayBatDauBangXpath(String dayCellXPath) {
         waitClickable(inputNgayBatDau).click();
@@ -386,7 +371,7 @@ public class HocKyPage {
     }
 
     /**
-     * Chọn ngày trong lịch dựa trên cấu hình tĩnh DATEPICKER_DAY_ID/DATEPICKER_DAY_XPATH.
+     * Chọn ngày trong lịch dựa trên cấu hình.
      */
     public void chonNgayBatDauTheoCauHinh() {
         if (DATEPICKER_DAY_ID != null && !DATEPICKER_DAY_ID.isEmpty()) {
@@ -435,7 +420,7 @@ public class HocKyPage {
         }
     }
 
-    /** Trả về giá trị hiện tại của ô Học kỳ (để assertion trong test) */
+    /** Trả về giá trị hiện tại của ô Học kỳ */
     public String getHocKyValue() {
         try {
             WebElement e = waitVisible(inputHocKy);
@@ -445,3 +430,4 @@ public class HocKyPage {
         }
     }
 }
+
